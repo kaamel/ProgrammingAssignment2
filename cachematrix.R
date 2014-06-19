@@ -4,24 +4,28 @@
 ## A pair of functions that cache the inverse of a matrix.
 
 ## Write a short comment describing this function
+
 ##  This function creates a special "matrix" object that can cache its inverse.
 makeCacheMatrix <- function(x = matrix()) {
-  cached_matrix <- NULL
-  set <- function(key) {
-    x <<- key
-    cached_matrix <<- NULL
+  ## This is the inverse
+  m <- NULL
+  ## set the vector
+  set <- function(y) {
+    x <<- y
+    m <<- NULL
   }
-  
+  ## get the vector
   get <- function() {
     x
   }
-  
+  ## set inverse of vector
   setmatrix <- function(matrix) {
-    cached_matrix <<- matrix
+    m <<- matrix
   }
   
+  ## get inverse of vector
   getmatrix <- function() {
-    cached_matrix
+    m
   }
   
   list(set=set, get=get,
@@ -31,22 +35,24 @@ makeCacheMatrix <- function(x = matrix()) {
 
 ## Write a short comment describing this function
 ## This function returns the inverse of the special "matrix" returned by
-## makeCacheMatrix from cache, if previously calculated, otherwise
-## calculates and saves into cache for future use, and returns it
+## makeCacheMatrix. If the inverse was previously calculated it is returned, otherwise
+## it is calculated, saved for future use, and returned
 cacheSolve <- function(x, ...) {
   ## Returns a matrix that is the inverse of 'x'
-  ## Calculates and cache it the first time
-  ## No calcuations the next time, if in the cache
+  ## Calculates and saves the first time
+  ## No need to recalcuate after the next time
   
-  cache_matrix <- x$getmatrix()
-  if(!is.null(cache_matrix)){
+  saved_inverse <- x$getmatrix()
+  if(!is.null(saved_inverse)){
     ## It is in cache so we are done!
     message("it is in the cache!")
-    return(cache_matrix)
+    return(saved_inverse)
   }
-  message("will calculate since not in cache!")  
+  message("will calculate it since not in cache!")  
   data <- x$get()
-  cahce_matrix <- solve(data, ...)
-  x$setmatrix(cahce_matrix)
-  cahce_matrix
+  ## calculate and save in cache
+  saved_inverse <- solve(data, ...)
+  ## save it
+  x$setmatrix(saved_inverse)
+  saved_inverse
 }
